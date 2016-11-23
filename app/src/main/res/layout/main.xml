@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="140px"
+        android:background="#ed664c"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25px"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:text="Com SSa"
+            android:textColor="#ffffff"
+            android:textSize="55px"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:weightSum="1">
+
+        <TextView
+            android:text="@string/login_id"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            tools:textColor="@color/colorAccent"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/edit_id"
+            android:inputType="text"
+            android:layout_width="200dip"
+            android:layout_weight="0.54"
+            android:layout_height="76dp"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.13"
+        android:weightSum="1">
+        <TextView
+            android:text="@string/login_pw"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:layout_weight="0.26" />
+
+        <EditText
+            android:id="@+id/edit_pw"
+            android:inputType="textPassword"
+            android:layout_width="200dip"
+            android:layout_height="72dp"
+            android:layout_weight="0.55"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        >
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:text="@string/login_btn"
+            />
+
+        <Button
+            android:id="@+id/btn_join"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:text="@string/join_btn"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

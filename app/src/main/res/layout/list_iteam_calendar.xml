@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#e3e3e3"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="17px"
+    android:paddingLeft="35px"
+    android:paddingRight="35px"
+    android:paddingTop="17px"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:padding="35px"
+        android:weightSum="1"
+        android:layout_weight="7.65">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110px"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!--<TextView-->
+            <!--android:id="@+id/board_numberText"-->
+            <!--android:layout_width="110px"-->
+            <!--android:layout_height="110px"-->
+            <!--android:text="박천권"-->
+            <!--android:textColor="#000000"-->
+            <!--android:textSize="80px"-->
+            <!--android:textStyle="bold"-->
+            <!--android:background="@drawable/people" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/작성자id"
+                    android:layout_width="134dp"
+                    android:layout_height="match_parent"
+                    android:text="박천권"
+                    android:textColor="#000000"
+                    android:textSize="50px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/일정날짜"
+                    android:layout_width="93dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="7px"
+                    android:text="12월 26일"
+                    android:textColor="#000000"
+                    android:textSize="25px"
+                    android:layout_weight="4.71" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/내용"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40px"
+            android:text="내용"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textColor="#222222"
+            android:textSize="45px"
+            android:layout_weight="1.58" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

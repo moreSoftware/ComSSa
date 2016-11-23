@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "720969374484",
+    "project_id": "moresoftwarea"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720969374484:android:5645e68df9e5bb92",
+        "android_client_info": {
+          "package_name": "simplesns.uiseon.com.simplesns"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa5frPALCrTbz8GX7-0gO0UCP2-HOsiv0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
