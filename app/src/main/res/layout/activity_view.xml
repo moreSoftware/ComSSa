@@ -72,7 +72,7 @@
 
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:hint="댓글 달아"
+            android:hint="댓글을 입력하세요."
             android:textColor="#000000"
             android:textColorHint="#cfcfcf"
             android:textSize="45px" />

@@ -88,20 +88,25 @@ public class MainView extends Activity {
                     //글 쓴 시간
                     String writeDate = boardDTO.getDatetime();
 
+                    String name = boardDTO.getName();
+
 
                     Intent intent = new Intent(MainView.this, ViewActivity.class);
                     //본인 ID
                     intent.putExtra("id", loginId);
                     //작성자 ID
-                    intent.putExtra("userName", write_user_id);
+                    intent.putExtra("write_user_id", write_user_id);
                     //게시글 번호
                     intent.putExtra("board_number", board_number);
                     //확인 했는지 체크
                     intent.putExtra("notice_check", notice_check);
-                    //작성된 날짜
-                    intent.putExtra("writeDate", writeDate);
                     //내용 넣기
                     intent.putExtra("storyText", storyText);
+                    //작성된 날짜
+                    intent.putExtra("writeDate", writeDate);
+                    //작성자 이름
+                    intent.putExtra("name",name);
+
                     startActivity(intent);
                 }
             }
@@ -167,6 +172,7 @@ public class MainView extends Activity {
                             if(startTag.equals("write_user_id")){ dto.setWrite_user_id(parser.nextText()); }
                             if(startTag.equals("notice_check")){ dto.setNotice_check(parser.nextText()); }
                             if(startTag.equals("date")){ dto.setDatetime(parser.nextText()); }
+                            if(startTag.equals("name")){ dto.setName(parser.nextText()); }
                         } else { Log.i("xxx", "dto = null"); }
                         break;
                     case XmlPullParser.END_TAG:
@@ -202,6 +208,7 @@ public class MainView extends Activity {
         Intent intent_refresh = new Intent(getApplicationContext(), MainView.class);
         intent_refresh.putExtra("id",id);
         startActivity(intent_refresh);
+        finish();
     }
 
 
@@ -246,10 +253,11 @@ public class MainView extends Activity {
 
             if (boardDTO != null) {
 
-//                TextView board_numberTextView = (TextView) v.findViewById(R.id.board_numberText);
-//                board_numberTextView.setText(Integer.toString(boardDTO.getBoard_number()));
-                //나중에 이용합시다
+                TextView board_numberTextView = (TextView) v.findViewById(R.id.board_numberText);
+                board_numberTextView.setText(Integer.toString(boardDTO.getBoard_number()));
 
+                TextView nameTextView = (TextView) v.findViewById(R.id.name);
+                nameTextView.setText(boardDTO.getName());
                 TextView substanceTextView = (TextView) v.findViewById(R.id.substanceText);
                 substanceTextView.setText(boardDTO.getSubstance());
 

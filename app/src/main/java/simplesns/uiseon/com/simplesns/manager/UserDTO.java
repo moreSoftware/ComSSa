@@ -9,6 +9,7 @@ public class UserDTO {
     private String passwd;
     private String passwdConfirm;
 
+
     public UserDTO(int userNumber, String type, String id, String passwd, String passwdConfirm) {
         super();
         this.userNumber = userNumber;
@@ -16,6 +17,7 @@ public class UserDTO {
         this.id = id;
         this.passwd = passwd;
         this.passwdConfirm = passwdConfirm;
+
     }
 
     public UserDTO() {
@@ -42,6 +44,8 @@ public class UserDTO {
         this.passwdConfirm = passwdConfirm;
     }
 
+
+
     public int getUserNumber() {
         return userNumber;
     }
@@ -61,5 +65,6 @@ public class UserDTO {
     public String getPasswdConfirm() {
         return passwdConfirm;
     }
+
 
 }

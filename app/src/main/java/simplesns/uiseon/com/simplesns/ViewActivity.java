@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,32 +12,40 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import simplesns.uiseon.com.simplesns.manager.AutoLayout;
-import simplesns.uiseon.com.simplesns.manager.CircleTransform;
-import simplesns.uiseon.com.simplesns.manager.Communicator;
+import simplesns.uiseon.com.simplesns.manager.CommentDTO;
 
 public class ViewActivity extends Activity {
     private AutoLayout autoLayout = AutoLayout.GetInstance();
-    private ArrayList<CommentInfo> commentInfoArrayList = new ArrayList<CommentInfo>();
+    private ArrayList<CommentDTO> commentInfoArrayList = new ArrayList<CommentDTO>();
     private CommentAdapter commentAdapter;
-    private int storyId = 0;
-    private int userId = 0;
+
     private EditText commentEditText;
     String id = null;
+    String write_user_id = null;
+    int board_number;
+    String name ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +53,14 @@ public class ViewActivity extends Activity {
         setContentView(R.layout.activity_view);
         Intent intent = getIntent();
 
-        id = intent.getExtras().getString("id");
-
-        storyId = intent.getIntExtra("storyId", -1);
-        userId = intent.getIntExtra("userId", -1);
-        String userName = intent.getStringExtra("userName");
-        String userImg = intent.getStringExtra("userImg");
-        String storyImg = intent.getStringExtra("storyImg");
-        String writeDate = intent.getStringExtra("writeDate");
+        id = intent.getStringExtra("id");
+        write_user_id = intent.getStringExtra("write_user_id");
+        board_number = intent.getExtras().getInt("board_number");
+        String notice_check = intent.getStringExtra("notice_check");
         String storyText = intent.getStringExtra("storyText");
+        name = intent.getStringExtra("name");
+        String date = intent.getStringExtra("writeDate");
+
 
         View view = (View) findViewById(android.R.id.content);
         autoLayout.setView(view);
@@ -77,11 +82,25 @@ public class ViewActivity extends Activity {
             }
         });
 
+
         Button sendBtn = (Button) findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setComment();
+                if(android.os.Build.VERSION.SDK_INT > 9) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
+                sendComment();
+                commentEditText.setText("");
+                requestGet(board_number);
+//                Intent intent_comment = new Intent(getApplicationContext(), ViewActivity.class);
+//                intent_comment.putExtra("id",id);
+//                startActivity(intent_write);
+//                finish();
+
+                //내용 입력하고 전송하기
+
             }
         });
 
@@ -91,17 +110,30 @@ public class ViewActivity extends Activity {
         View headerView = vi.inflate(R.layout.list_header_view, null);
 
 
-        TextView nameTextView = (TextView) headerView.findViewById(R.id.userName);
-        nameTextView.setText(userName);
 
-        TextView dateTextView = (TextView) headerView.findViewById(R.id.writeDate);
-        dateTextView.setText(writeDate);
 
-        TextView storyTextView = (TextView) headerView.findViewById(R.id.storyText);
-        storyTextView.setText(storyText);
 
-        ImageView storyImgView = (ImageView) headerView.findViewById(R.id.storyImg);
 
+
+
+        TextView board_numberTextView = (TextView) headerView.findViewById(R.id.board_numberText);
+        board_numberTextView.setText(String.valueOf(board_number));
+
+        TextView nameTextView = (TextView) headerView.findViewById(R.id.name);
+        nameTextView.setText(name);
+        TextView substanceTextView = (TextView) headerView.findViewById(R.id.substanceText);
+        substanceTextView.setText(storyText);
+
+        TextView write_user_idText = (TextView) headerView.findViewById(R.id.write_user_idText);
+        write_user_idText.setText(write_user_id);
+
+        TextView notice_checkText = (TextView) headerView.findViewById(R.id.notice_check);
+        if(notice_check.equals("0"))
+            notice_checkText.setText(" ");
+
+
+        TextView datetimeText = (TextView) headerView.findViewById(R.id.datetimeText);
+        datetimeText.setText("date");
 
 
 
@@ -114,70 +146,122 @@ public class ViewActivity extends Activity {
         commentAdapter = new CommentAdapter(this, R.layout.list_item_view, commentInfoArrayList);
         listView.setAdapter(commentAdapter);
 
-        getCommentsList();
+        requestGet(board_number);
     }
+    public void requestGet(int board_number) {
+        String requestURL = "http://27.1.165.192:8082/99JSP_myEMP/usercommentselect.jsp"+"?board_number="+board_number;
+        Log.i("xxx", "requestGet start");
+        try {
+            //1.
+            HttpClient client = new DefaultHttpClient();
 
-    private void getCommentsList() {
-        Communicator.getHttp("http://xylophone.uiseon.co.kr/project/sns/sns.php?tr=105&story_id="+storyId, new Handler() {
-            public void handleMessage(Message msg) {
-                String jsonString = msg.getData().getString("jsonString");
-                commentInfoArrayList.clear();
+            HttpGet get = new HttpGet(requestURL);
+            //2. 요청
+            HttpResponse response = client.execute(get);
+            //3. 결과 받기
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+            getXML(is);
 
-                try {
-                    JSONObject dataObject = new JSONObject(jsonString);
-                    JSONArray jsonStoryList = dataObject.getJSONArray("comment_list");
+        } catch (Exception e) {
+            e.printStackTrace();
 
-                    JSONObject tempObject;
-                    for (int i = 0; i < jsonStoryList.length(); i++) {
-                        tempObject = jsonStoryList.getJSONObject(i);
-                        int story_id = tempObject.getInt("story_id");
-                        int user_id = tempObject.getInt("user_id");
-                        String userName = tempObject.getString("user_name");
-                        String userImg = tempObject.getString("user_img");
-                        String comment_text = tempObject.getString("comment_text");
-                        String comment_date = tempObject.getString("comment_date");
+        }
+    }//end requestGet()
+    public void getXML(InputStream is) {
 
-
-                        CommentInfo commentInfo = new CommentInfo(story_id, user_id, userName, userImg, comment_text, comment_date);
-
-                        commentInfoArrayList.add(commentInfo);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                commentAdapter.notifyDataSetChanged();
+        Log.i("xxx", "getXML start!");
+        try {
+            commentInfoArrayList.clear();
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "UTF-8");
+            int eventType = parser.getEventType();
+            CommentDTO dto = null;
+            while( eventType != XmlPullParser.END_DOCUMENT) {
+                switch(eventType) {
+                    case XmlPullParser.START_TAG:
+                        String startTag = parser.getName();
+                        Log.i("xxxx", startTag);
+                        if(startTag.equals("record")){ dto = new CommentDTO(); }
+                        if(dto !=null ) {
+                            if(startTag.equals("comment_number")){ dto.setComment_number(Integer.parseInt(parser.nextText()));}
+                            if(startTag.equals("board_number")){ dto.setBoard_number(Integer.parseInt(parser.nextText())); }
+                            if(startTag.equals("substance")){ dto.setSubstance(parser.nextText()); }
+                            if(startTag.equals("write_user_id")){ dto.setWrite_user_id(parser.nextText()); }
+                            if(startTag.equals("name")){ dto.setName(parser.nextText()); }
+                            if(startTag.equals("date")){ dto.setDatetime(parser.nextText()); }
+                        } else { Log.i("xxx", "dto = null"); }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        String endTag = parser.getName();
+                        if(endTag.equals("record")){
+                            commentInfoArrayList.add(dto);
+                        }
+                }//end switch
+                eventType = parser.next();
+            }//end while
+            for( CommentDTO xx : commentInfoArrayList){
+                Log.i("xxx",xx.getBoard_number()+" "+xx.getSubstance()+" "+xx.getWrite_user_id()+ " "+ xx.getDatetime()+" "+xx.getName()+" ");
             }
-        });
-    }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException ie) {
+            // TODO Auto-generated catch block
+            ie.printStackTrace();
+        }
 
-    private void setComment() {
-        //
+        commentAdapter.notifyDataSetChanged();
+    }
+    public void sendComment(){
         String commentText = commentEditText.getText().toString();
+        String requestURL = "http://27.1.165.192:8082/99JSP_myEMP/usercommentinsertdo2.jsp";
+        Log.i("xxx", "requestGet start");
+        try {
+            if(android.os.Build.VERSION.SDK_INT > 9) {
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+                StrictMode.setThreadPolicy(policy);
+            }
+            //1.
+            HttpClient client = new DefaultHttpClient();
+            //폼데이터 저장
+            List<NameValuePair> dataList = new ArrayList<NameValuePair>();
+            dataList.add(new BasicNameValuePair("board_number", String.valueOf(board_number)));
+            dataList.add(new BasicNameValuePair("substance", commentText));
+            dataList.add(new BasicNameValuePair("write_user_id", write_user_id));
+            dataList.add(new BasicNameValuePair("name",name));
+
+            requestURL = requestURL + "?" + URLEncodedUtils.format(dataList, "UTF-8");
+            HttpGet get = new HttpGet(requestURL);
+
+            //2. 요청
+            HttpResponse response = client.execute(get);
+
+            //3. 결과 받기
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
         if (commentText.equals("")) {
+            Toast.makeText(this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        try {
-
-            Log.d("test","http://xylophone.uiseon.co.kr/project/sns/sns.php?tr=104&story_id=" + storyId + "&user_id=" + userId + "&comment_text=" + URLEncoder.encode(commentText, "UTF-8") );
-            Communicator.getHttp("http://xylophone.uiseon.co.kr/project/sns/sns.php?tr=104&story_id=" + storyId + "&user_id=" + userId + "&comment_text=" + URLEncoder.encode(commentText, "UTF-8"), new Handler() {
-                public void handleMessage(Message msg) {
-                    String jsonString = msg.getData().getString("jsonString");
-                    Log.d("test", "jsonString " + jsonString);
-                    commentEditText.setText("");
-                    getCommentsList();
-                }
-            });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
+    //수정완료
+    private class CommentAdapter extends ArrayAdapter<CommentDTO> {
 
-    private class CommentAdapter extends ArrayAdapter<CommentInfo> {
+        private ArrayList<CommentDTO> items;
 
-        private ArrayList<CommentInfo> items;
-
-        public CommentAdapter(Context context, int textViewResourceId, ArrayList<CommentInfo> items) {
+        public CommentAdapter(Context context, int textViewResourceId, ArrayList<CommentDTO> items) {
             super(context, textViewResourceId, items);
             this.items = items;
         }
@@ -192,74 +276,27 @@ public class ViewActivity extends Activity {
             }
 
 
-            CommentInfo commentInfo = items.get(position);
+            CommentDTO commentInfo = items.get(position);
 
             if (commentInfo != null) {
-                ImageView profileImg = (ImageView) v.findViewById(R.id.profile_img);
-                if (commentInfo.getUserImg() != null && !commentInfo.getUserImg().equals("")) {
-                    try {
-                        Picasso.with(ViewActivity.this).load(commentInfo.getUserImg()).transform(new CircleTransform()).into(profileImg);
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                TextView nameTextView = (TextView) v.findViewById(R.id.userName);
-                nameTextView.setText(commentInfo.getUserName());
-
-                TextView dateTextView = (TextView) v.findViewById(R.id.writeDate);
-                dateTextView.setText(commentInfo.getCommentDate());
-
+                //댓글 다는 id
+                TextView idTextView = (TextView) v.findViewById(R.id.commentId);
+                idTextView.setText(id);
+                //댓글 다는 이름
+                TextView nameTextView = (TextView) v.findViewById(R.id.commentName);
+                nameTextView.setText(commentInfo.getName());
+                //댓글 다는 날짜
+                TextView dateTextView = (TextView) v.findViewById(R.id.commentDate);
+                dateTextView.setText(commentInfo.getDatetime());
+                //댓글 내용
                 TextView storyText = (TextView) v.findViewById(R.id.commentText);
-                storyText.setText(commentInfo.getCommentText());
-
+                storyText.setText(commentInfo.getSubstance());
 
             }
             return v;
         }
     }
 
-    class CommentInfo {
-        private int commentId;
-        private int userId;
-        private String userName;
-        private String userImg;
-        private String commentText;
-        private String commentDate;
 
-        CommentInfo(int commentId, int userId, String userName, String userImg, String commentTex, String commentDate) {
-            this.commentId = commentId;
-            this.userId = userId;
-            this.userName = userName;
-            this.userImg = userImg;
-            this.commentText = commentTex;
-            this.commentDate = commentDate;
-        }
-
-
-        public int getCommentId() {
-            return commentId;
-        }
-
-        public int getUserId() {
-            return userId;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public String getUserImg() {
-            return userImg;
-        }
-
-        public String getCommentText() {
-            return commentText;
-        }
-
-        public String getCommentDate() {
-            return commentDate;
-        }
-    }
 
 }

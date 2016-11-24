@@ -1,63 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="#e3e3e3"
+android:gravity="center"
+android:orientation="vertical"
+android:paddingBottom="17px"
+android:paddingLeft="35px"
+android:paddingRight="35px"
+android:paddingTop="17px"
+android:weightSum="1">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#ffffff"
     android:orientation="vertical"
-    android:paddingLeft="35px"
-    android:paddingRight="35px">
+    android:padding="35px"
+    android:weightSum="1"
+    android:layout_weight="3.18">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="110px"
         android:orientation="horizontal"
-        android:paddingBottom="35px"
-        android:paddingTop="35px">
+        android:weightSum="1">
 
+        <!--<TextView-->
+        <!--android:id="@+id/board_numberText"-->
+        <!--android:layout_width="110px"-->
+        <!--android:layout_height="110px"-->
+        <!--android:text="박천권"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textSize="80px"-->
+        <!--android:textStyle="bold"-->
+        <!--android:background="@drawable/people" />-->
         <ImageView
             android:id="@+id/profile_img"
             android:layout_width="110px"
             android:layout_height="110px"
-            android:background="@drawable/profile_bg" />
+            android:background="@drawable/people" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25px"
-            android:orientation="vertical">
+            android:layout_marginLeft="20px"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <TextView
-                android:id="@+id/userName"
-                android:layout_width="match_parent"
+                android:id="@+id/commentId"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="박천권"
+                android:text="201215548"
                 android:textColor="#000000"
-                android:textSize="40px"
+                android:textSize="50px"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/commentText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10px"
-                android:layout_marginBottom="15px"
-                android:text="내용"
-                android:textColor="#696969"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/commentName"
+                android:text="류원상"
+                android:textColor="#000000"
+                android:textSize="50px"
                 android:textStyle="bold"
-                android:textSize="35px" />
+                android:layout_weight="0.60" />
 
             <TextView
-                android:id="@+id/writeDate"
-                android:layout_width="match_parent"
+                android:text="댓글"
+                android:layout_width="39dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7px"
-                android:text="12월 26일"
-                android:textColor="#999999"
-                android:textSize="25px" />
+                android:textColor="@android:color/holo_purple"
+                android:id="@+id/textView"
+                android:layout_weight="0.39" />
+
+
         </LinearLayout>
+
+
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/commentDate"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#cfcfcf"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7px"
+        android:text="12월 26일"
+        android:textColor="#000000"
+        android:textSize="25px" />
+
+
+    <TextView
+        android:id="@+id/commentText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="#222222"
+        android:textSize="45px"
+        android:layout_weight="1.58" />
+
+
+</LinearLayout>
+
 </LinearLayout>

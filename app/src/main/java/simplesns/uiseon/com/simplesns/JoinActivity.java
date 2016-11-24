@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,54 +25,74 @@ import java.util.List;
 public class JoinActivity extends Activity {
 
     Button btnDone ,btnCancel;
-    EditText etUserNum,etType,etID,etPassword,etPasswordConfirm;
+    EditText etName,etType,etID,etPassword,etPasswordConfirm;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join);
 
-        etUserNum = (EditText)findViewById(R.id. etUserNum);
+        etName = (EditText)findViewById(R.id.etName);
         etType = (EditText)findViewById(R.id.etType);
         etID = (EditText)findViewById(R.id.etID);
         etPassword= (EditText)findViewById(R.id.etPassword);
         etPasswordConfirm= (EditText)findViewById(R.id.etPasswordConfirm);
 
-
+//ㅁㅁㅁㅁㅁㅁ
         btnDone= (Button) findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                String userNumber =  etUserNum.getText().toString();
-                String type =   etType.getText().toString();
-                String id =  etID.getText().toString();
-                String passwd  = etPassword.getText().toString();
-                String passwdConfirm = etPasswordConfirm.getText().toString();
-                String requestURL = "http://27.1.165.192:8082/99JSP_myEMP/userinsertdo2.jsp";
-                InputStream is= requestGet(requestURL,userNumber,type,id,passwd,passwdConfirm);
 
 
-                if(android.os.Build.VERSION.SDK_INT > 9) {
+                if(etName.getText().length() == 0 || etType.getText().length() == 0  || etID.getText().length() == 0  || etPassword.getText().length() == 0  || etPasswordConfirm.getText().length() == 0 ) {
+                    Toast.makeText(JoinActivity.this, "빈 칸을 입력해주세요", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+
+
+                else{
+
+                    String name = etName.getText().toString();
+                    String type =   etType.getText().toString();
+                    String id =  etID.getText().toString();
+                    String passwd  = etPassword.getText().toString();
+                    String passwdConfirm = etPasswordConfirm.getText().toString();
+
+                    if(!passwd.equals(passwdConfirm)){
+                        Toast.makeText(JoinActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    String requestURL = "http://27.1.165.192:8082/99JSP_myEMP/userinsertdo2.jsp";
+                    InputStream is= requestGet(requestURL,name,type,id,passwd,passwdConfirm);
+
+
+                    if(android.os.Build.VERSION.SDK_INT > 9) {
 
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
                         StrictMode.setThreadPolicy(policy);
 
-                 }
-    finish();
-}
-});//end onClick()
+                    }
+                    finish(); }
+            }
+        });//end onClick()
         btnCancel= (Button) findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent2);
             }
         });//end onClick()
 
     }
 
-    public InputStream requestGet(String requestURL, String userNumber, String type, String id, String passwd, String passwdConfirm) {
+    public InputStream requestGet(String requestURL, String name, String type, String id, String passwd, String passwdConfirm) {
 
         Log.i("xxx", "requestGet start");
         try {
@@ -88,7 +109,7 @@ public class JoinActivity extends Activity {
 
             //폼데이터 저장
             List<NameValuePair> dataList = new ArrayList<NameValuePair>();
-            dataList.add(new BasicNameValuePair("userNumber", userNumber));
+            dataList.add(new BasicNameValuePair("name", name));
             dataList.add(new BasicNameValuePair("type", type));
             dataList.add(new BasicNameValuePair("id", id));
             dataList.add(new BasicNameValuePair("passwd", passwd));

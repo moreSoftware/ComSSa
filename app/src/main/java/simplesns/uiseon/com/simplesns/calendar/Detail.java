@@ -56,13 +56,6 @@ public class Detail extends Activity implements View.OnClickListener { // 일정
         setContentView(R.layout.activity_detail);
 
 
-
-
-
-
-
-
-
         Intent intent = getIntent();
 
         id= intent.getStringExtra("id");
@@ -77,7 +70,7 @@ public class Detail extends Activity implements View.OnClickListener { // 일정
 
         editMemo = (EditText) findViewById(R.id.editmemo);
 
-
+        editDate.setText(today);
 
 
 

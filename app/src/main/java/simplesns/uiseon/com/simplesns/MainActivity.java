@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
         et_pw = (EditText) findViewById(R.id.edit_pw);
 
 
-        
+
         Button btn_join = (Button) findViewById(R.id.btn_join);
         btn_join.setOnClickListener(new View.OnClickListener() {
 
@@ -72,37 +72,45 @@ public class MainActivity extends Activity {
                 id = et_id.getText().toString();
                 pw = et_pw.getText().toString();
 
-                new Handler().post(new Runnable() {
 
-                    public void run() {
-                        String url = "http://27.1.165.192:8082/99JSP_myEMP/userlogin2.jsp";
+                if ((id.length() == 0) || (pw.length() == 0)) {
+                    Toast.makeText(MainActivity.this, "다시입력하세요", Toast.LENGTH_LONG).show();
+                    Intent intent_retry = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent_retry);
+                    finish();
+                } else {
+                    new Handler().post(new Runnable() {
+
+                        public void run() {
+                            String url = "http://27.1.165.192:8082/99JSP_myEMP/userlogin2.jsp";
 //                                                              String url = "http://125.179.204.2:8080/AndroidServer/login.jsp?id=mygirl2&pwd=1111";
 
 
-                        new MainActivity().connect(url);
-                        //이게 중요함
-                        while (true) {
-                            if (isConnected) {
+                            new MainActivity().connect(url);
+                            //이게 중요함
+                            while (true) {
+                                if (isConnected) {
 
-                                Log.v("xxx", msgString);
-                                if(msgString.equals(id+"님 로그인되었습니다. 환영합니다.")) {
-                                    Toast.makeText(MainActivity.this, msgString, Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainView.class);
-                                    intent.putExtra("id",id);
-                                    startActivity(intent);
-                                }
-                                else {
-                                    Toast.makeText(MainActivity.this, "다시입력하세요", Toast.LENGTH_LONG).show();
+                                    Log.v("xxx", msgString);
+                                    if (msgString.equals(id + "님 로그인되었습니다. 환영합니다.")) {
+                                        Toast.makeText(MainActivity.this, msgString, Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainView.class);
+                                        intent.putExtra("id", id);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "다시입력하세요", Toast.LENGTH_LONG).show();
 
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
-
         });
+
+
     }
 
 

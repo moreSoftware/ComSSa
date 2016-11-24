@@ -40,65 +40,10 @@
     <ListView
         android:id="@+id/main_list_view"
         android:layout_width="match_parent"
-        android:background="#e3e3e3"
+        android:background="#fefefe"
         android:paddingTop="17px"
         android:paddingBottom="17px"
-        android:layout_weight="0.55"
-        android:layout_height="410dp">
+        android:layout_height="match_parent">
     </ListView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:background="#e3e3e3"
-        android:layout_weight="0.21"
-        android:layout_height="40dp">
-
-
-        <ImageView
-
-            android:id="@+id/NoticePart"
-            android:layout_height="35dp"
-            android:background="@drawable/notice"
-            android:layout_marginRight="80dp"
-            android:layout_width="35dp"
-            android:onClick="noticeClicked"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="64dp" />
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            app:srcCompat="@drawable/check"
-            android:id="@+id/check"
-            android:onClick="checkClicked"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="37dp" />
-
-        <ImageView
-
-            android:id="@+id/CommunityPart"
-            android:background="@drawable/community"
-            android:layout_marginRight="80dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:onClick="refreshClicked"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/check"
-            android:layout_marginEnd="38dp" />
-
-        <ImageView
-            android:orientation="horizontal"
-            android:id="@+id/CalendarPart"
-            android:background="@drawable/calendar"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:onClick="calendarClicked"
-            android:layout_marginStart="47dp"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/NoticePart" />
-
-    </RelativeLayout>
 
 </LinearLayout>

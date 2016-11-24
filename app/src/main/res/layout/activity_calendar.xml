@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
 
     android:layout_height="fill_parent"
@@ -24,7 +25,12 @@
         android:orientation="horizontal" >
 
 
-
+        <ImageView
+            android:background="@drawable/beforem"
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:onClick="beforeMClicked" />
 
         <EditText
 
@@ -72,8 +78,6 @@
             android:hint="월" />
 
 
-
-
         <Button
 
             android:id="@+id/bt1"
@@ -84,9 +88,14 @@
 
             android:hint="클릭" />
 
+        <ImageView
+            android:background="@drawable/nextm"
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:onClick="nextMClicked" />
+
     </LinearLayout>
-
-
 
 
     <LinearLayout
@@ -98,7 +107,8 @@
         android:layout_weight="1"
 
         android:orientation="vertical"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:weightSum="1">
 
 
 
@@ -109,16 +119,24 @@
 
             android:layout_width="fill_parent"
 
-            android:layout_height="wrap_content"
+            android:layout_height="267dp"
 
             android:gravity="center"
 
-            android:numColumns="7" >
+            android:numColumns="7"
+            android:layout_weight="1.02">
 
         </GridView>
 
+        <ListView
+            android:id="@+id/calendar_list_view"
+            android:layout_width="match_parent"
+            android:background="#e3e3e3"
+            android:paddingTop="17px"
+            android:paddingBottom="17px"
+            android:layout_height="167dp">
+        </ListView>
     </LinearLayout>
-
 
 
 </LinearLayout>

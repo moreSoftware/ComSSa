@@ -1,12 +1,12 @@
 {
   "project_info": {
-    "project_number": "720969374484",
-    "project_id": "moresoftwarea"
+    "project_number": "980963880806",
+    "project_id": "firebase-comssa"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:720969374484:android:5645e68df9e5bb92",
+        "mobilesdk_app_id": "1:980963880806:android:5645e68df9e5bb92",
         "android_client_info": {
           "package_name": "simplesns.uiseon.com.simplesns"
         }
@@ -14,7 +14,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAa5frPALCrTbz8GX7-0gO0UCP2-HOsiv0"
+          "current_key": "AIzaSyBJrFX1NCNRp9YCOM8Gs25Z0Uy3pIOj7Oc"
         }
       ],
       "services": {

@@ -159,9 +159,9 @@ public class NoticeActivity extends Activity {
 
             if (boardDTO != null) {
 
-//                TextView board_numberTextView = (TextView) v.findViewById(R.id.board_numberText);
-//                board_numberTextView.setText(Integer.toString(boardDTO.getBoard_number()));
-                //나중에 이용합시다
+               TextView board_numberTextView = (TextView) v.findViewById(R.id.board_numberText);
+               board_numberTextView.setText(Integer.toString(boardDTO.getBoard_number()));
+
 
                 TextView substanceTextView = (TextView) v.findViewById(R.id.substanceText);
                 substanceTextView.setText(boardDTO.getSubstance());
